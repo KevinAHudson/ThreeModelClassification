@@ -4,16 +4,20 @@ from BaseModel import ClassificationModel
 from sklearn.metrics import confusion_matrix, plot_confusion_matrix
 import seaborn as sns
 
+# Define the Logistic Regression class, which inherits from the ClassificationModel class
+
 
 class LogisticRegression(ClassificationModel):
+    # Initialize the class with learning rate (alpha), number of epochs, random seed, and batch size
     def __init__(self, alpha: float, epochs: int = 1, seed: int = None, batch_size: int = None):
         ClassificationModel.__init__(self)
         self.alpha = alpha
         self.epochs = epochs
         self.seed = seed
         self.batch_size = batch_size
-        self.w = None
+        self.w = None  # Initialize weights to None
 
+    # Method to plot and save the confusion matrix
     def plot_confusion_matrix(self, X: np.ndarray, y: np.ndarray) -> None:
         y_pred = self.predict(X)
         conf_mat = confusion_matrix(y, y_pred)
@@ -27,11 +31,12 @@ class LogisticRegression(ClassificationModel):
             '/Users/kevinhudson/Documents/Classification Mini Project/confusion_matrix_regression.png')
         plt.show()
 
+    # Softmax activation function for multi-class classification
     def softmax(self, z: np.ndarray) -> np.ndarray:
-        # Softmax activation function for multi-class classification
         z_exp = np.exp(z - np.max(z, axis=1, keepdims=True))
         return z_exp / np.sum(z_exp, axis=1, keepdims=True)
 
+    # Method to train the model
     def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         if self.seed is not None:
             np.random.seed(self.seed)
@@ -48,6 +53,7 @@ class LogisticRegression(ClassificationModel):
         previous_loss = np.inf
         loss_threshold = 0.0075  # 5% threshold for adjusting alpha
 
+        # Training loop
         for epoch in range(self.epochs):
             total_loss = 0
             for i in range(0, n_samples, self.batch_size):
@@ -57,14 +63,17 @@ class LogisticRegression(ClassificationModel):
                 z = X_batch.dot(self.w)
                 probs = self.softmax(z)
 
+                # Compute gradient and update weights
                 grad = X_batch.T.dot(probs - y_batch) / self.batch_size
                 self.w -= self.alpha * grad
 
+                # Compute loss
                 epsilon = 1e-7
                 loss = -np.sum(y_batch * np.log(probs + epsilon)
                                ) / self.batch_size
                 total_loss += loss
 
+            # Compute average loss and loss change
             avg_loss = total_loss / (n_samples // self.batch_size)
             loss_change = (previous_loss - avg_loss) / previous_loss
 
@@ -85,10 +94,12 @@ class LogisticRegression(ClassificationModel):
             last_sample_actual = np.argmax(y_batch[1])
             print(
                 f"Last sample prediction: {last_sample_prediction}, Actual: {last_sample_actual}")
+
+        # Plot confusion matrix after training
         self.plot_confusion_matrix(X, y)
 
+    # Method to predict the class of a given input
     def predict(self, X: np.ndarray):
-
         z = X.dot(self.w)
         probs = self.softmax(z)
         y_hat = np.argmax(probs, axis=1).reshape(-1, 1)

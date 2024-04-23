@@ -1,0 +1,8 @@
+__pycache__/BaseModel.cpython-39.pyc
+__pycache__/Data_Prep.cpython-39.pyc
+__pycache__/HyperParameters.cpython-39.pyc
+__pycache__/Naive_Bayes.cpython-39.pyc
+__pycache__/Perceptron.cpython-39.pyc
+__pycache__/Regression.cpython-39.pyc
+datasets/.DS_Store
+datasets/data/.DS_Store

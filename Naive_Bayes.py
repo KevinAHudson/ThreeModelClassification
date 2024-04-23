@@ -1,13 +1,15 @@
-
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import norm
 from BaseModel import ClassificationModel
-from sklearn.metrics import confusion_matrix, plot_confusion_matrix
+from sklearn.metrics import confusion_matrix
 import seaborn as sns
+
+# Define the Naive Bayes class, which inherits from ClassificationModel
 
 
 class NaiveBayes(ClassificationModel):
+    # Initialize the class with smoothing parameter
     def __init__(self, smoothing: float = 1e-2):
         ClassificationModel.__init__(self)
         self.smoothing = smoothing
@@ -17,14 +19,17 @@ class NaiveBayes(ClassificationModel):
         self.means = None
         self.stds = None
 
+    # Method to compute log of Gaussian distribution
     def log_gaussian_distribution(self, X: np.ndarray, mu: np.ndarray, std: np.ndarray) -> np.ndarray:
         return norm.logpdf(X, mu, std**2)
 
+    # Method to compute priors (class probabilities)
     def compute_priors(self, y: np.ndarray) -> None:
         unique_labels, counts = np.unique(y, return_counts=True)
         self.priors = counts / y.shape[0]
         self.log_priors = np.log(self.priors)
 
+    # Method to plot and save the confusion matrix
     def plot_confusion_matrix(self, X: np.ndarray, y: np.ndarray) -> None:
         y_pred = self.predict(X)
         conf_mat = confusion_matrix(y, y_pred)
@@ -38,6 +43,7 @@ class NaiveBayes(ClassificationModel):
             '/Users/kevinhudson/Documents/Classification Mini Project/confusion_matrix_naive_bayes.png')
         plt.show()
 
+    # Method to compute features
     def compute_features(self, X: np.ndarray, y: np.ndarray) -> None:
         # Calculate means and std for each feature per class
         self.class_labels = np.unique(y)

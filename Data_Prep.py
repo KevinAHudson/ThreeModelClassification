@@ -1,4 +1,3 @@
-
 from abc import ABC, abstractmethod
 from util.data import binarize_classes, dataframe_to_array
 from datasets.MNISTDataset import MNISTDataset

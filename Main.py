@@ -1,15 +1,10 @@
 import traceback
-from abc import abstractmethod
-from util.data import binarize_classes, dataframe_to_array
-from sklearn.preprocessing import StandardScaler
 from util.timer import Timer
 from util.metrics import accuracy
-from datasets.MNISTDataset import MNISTDataset
 from Naive_Bayes import NaiveBayes
 from Perceptron import Perceptron
 from Regression import LogisticRegression
-# add new imports
-from Data_Prep import DataPreparation, MNISTData_Prep
+from Data_Prep import MNISTData_Prep
 from HyperParameters import HyperParametersAndTransforms
 
 

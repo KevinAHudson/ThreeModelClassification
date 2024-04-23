@@ -1,4 +1,3 @@
-# add imports
 from sklearn.preprocessing import StandardScaler
 from BaseModel import ClassificationModel
 
